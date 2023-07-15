@@ -1,33 +1,93 @@
 ---
 title: "data_summary_EW"
 author: "Schoodic Institute"
-date: "`r Sys.Date()`"
 output: 
   html_document:
-    css: scripts/pages_style.css
+    css: index/pages_style.css
 github_repo: https://kylelima21.github.io/cc_refugia/
 ---
 
-```{r setup, include=FALSE}
-knitr::opts_chunk$set(echo = TRUE)
+```{r echo = FALSE, include = FALSE}
+library(tidyverse)
+library(lubridate)
+#library(kableExtra)
+#library(htmltools)
+#library(sf)
+#library(gt)
+source("index/index_functions.R")
+
+ # <div class = "logo-one">
+ #  <img src="index/img/schoodic_horizontal.png" alt="Schoodic Institute at Acadia National Park"
+ #        class="cs-logo">
+ #  </div>
+
 ```
 
-## R Markdown
+<!-- Header -->
+<div class = "titlepage-box">
+  <div class = "primary-header">
+  <img src="index/img/schoodic_horizontal.png" alt="Schoodic Institute at Acadia National Park"
+         class="cs-logo">
+  <div class = "headerone">
+  CLIMATE CHANGE REFUGIA
+  </div>
+  <div class = "headertwo">
+  ACADIA NATIONAL PARK
+  </div>
+  
+  
+  <div class = "titlepage-title">
+  Data 
+  <div class = "titlepage-title2">
+  Summary
+  </div>
+  <div class = "titlepage-subtitle">
+  Current results from the Climate Change Refugia project from data collected by Earthwatch groups like   you.
+  </div>
+  </div>
+  
+  </div>
+  
+  <div class = "image-stack">
+  <img src="index/img/crowmap.png" alt="Schoodic Institute at Acadia National Park"
+        class="map-top">
+  <img src="index/img/crow.png" alt="Schoodic Institute at Acadia National Park"
+        class="crow-mid">
+  <img src="index/img/cinq.png" alt="Schoodic Institute at Acadia National Park"
+        class="cinq-bottom">
+  </div>
+  
+</div>
 
-This is an R Markdown document. Markdown is a simple formatting syntax for authoring HTML, PDF, and MS Word documents. For more details on using R Markdown see <http://rmarkdown.rstudio.com>.
 
-When you click the **Knit** button a document will be generated that includes both content as well as the output of any embedded R code chunks within the document. You can embed an R code chunk like this:
 
-```{r cars}
-summary(cars)
-```
+<div class = "bodybody">
+  
+  <div class = "intro-box">
+  <img src="index/img/crow.png" alt="Schoodic Institute at Acadia National Park"
+        class="crowbox">
+  <img src="index/img/cinq.png" alt="Schoodic Institute at Acadia National Park"
+        class="cinqbox">
+  </div>
+  
+  
+  <div class = "test">
+  test
+  </div>
+  
+  
+  <div class = "test">
+  test
+  </div>
+  
+  
+  <div class = "test">
+  test
+  </div>
+  
+</div>
 
-## Including Plots
 
-You can also embed plots, for example:
 
-```{r pressure, echo=FALSE}
-plot(pressure)
-```
 
-Note that the `echo = FALSE` parameter was added to the code chunk to prevent printing of the R code that generated the plot.
+
