@@ -1,0 +1,732 @@
+/* Set core root defaults */
+@import url('https://fonts.googleapis.com/css?family=Rubik:100,200,300,400,500,600,700,800,900');
+
+:root {
+  --clr-base-blue: rgb(146, 206, 208, 1);
+  --clr-base-green: rgb(72, 150, 25, 1);
+  --clr-base-purple: rgba(13, 4, 42, 1);
+
+  --clr-opaque-blue: rgb(146, 206, 208, .8);
+  --clr-opaque-green: rgb(72, 150, 25, 0.8);
+  --clr-opaque-purple: rgba(13, 4, 42, 0.7);
+
+  --clr-body-boxes: rgba(122, 154, 157, 0.6);
+  
+  --clr-text-light: rgba(255, 255, 255, 1);
+  --clr-text-dark: rgba(0, 0, 0, 1);
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  font-family: 'Rubik', Sans-Serif;
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+  scroll-behavior: smooth;
+}
+
+.title, .author {
+  display: none;
+}
+
+html:focus-within {
+  scroll-behavior: smooth;
+}
+
+a:focus {
+  outline: 2px solid rgba(255, 255, 255, 1);
+  outline-offset: 3px;
+}
+
+body {
+  text-rendering: optimizeSpeed;
+  line-height: 1.5;
+  background-image: url("../img/sch_back.JPG");
+  background-size: cover;
+  background-repeat: no-repeat;
+  background-attachment: fixed;
+  background-position: center;
+  overflow-x: hidden;
+}
+
+ul[role="list"],
+ol[role="list"] {
+  list-style: none;
+}
+
+.bodybody {
+  margin-top: 100px;
+  padding-right: 25px;
+  padding-left: 25px;
+}
+
+.body-title-box {
+  position: absolute;
+  top: 0;
+  left: 1%;
+  align-items: center;
+  justify-content: left;
+  color: var(--clr-text-light);
+}
+
+.body-titles {
+  margin-left: 1rem;
+  font-size: 30px;
+  font-weight: 500;
+}
+
+.body-box {
+  position: relative;
+  background-color: var(--clr-body-boxes);
+  margin: 50px auto;
+  width: 100%;
+  padding: 30px;
+  border-radius: 1rem;
+  box-shadow: 3px 3px 1rem rgba(0, 0, 0, 0.4);
+}
+
+.cite {
+  grid-area: images;
+  position: absolute;
+  color: black;
+  font-size: 18px;
+  font-weight: 500;
+  right: 30px;
+  bottom: 15px;
+}
+
+.main-container {
+  max-width: none !important;
+}
+
+.container-fluid {
+  padding-left: 0;
+  padding-right: 0;
+}
+
+
+
+
+
+
+
+
+
+/* Title page styling*/
+
+.titlepage-box {
+  height: 100vh;
+  background-image: linear-gradient(100deg, var(--clr-base-purple), var(--clr-base-blue));
+  box-shadow: 3px 7px 1rem rgba(0, 0, 0, 0.4);
+  display: grid;
+  grid-template-columns: 50% 50%;
+  grid-template-areas:
+    "header gall"
+    "header gall"
+}
+
+.primary-header {
+  grid-area: header;
+  position: relative;
+  text-align: center; 
+  /*height: 5.9vw;*/
+  margin: 30px 0 0 0;
+  display: grid;
+  grid-template-columns: 31% 3% 33% 33%;
+  grid-template-rows: 8% 92%;
+  grid-template-areas:
+    "logo . header1 header2 ."
+    "title title title title title"
+}
+
+.cs-logo {
+  grid-area: logo;
+  background-color: white;
+  border-radius: 0.5rem;
+  padding: 1px 1px 1px 1px;
+  width: 12vw;
+  min-width: 100px;
+  justify-self: right;
+  box-shadow: 3px 3px 1rem rgba(0, 0, 0, 0.4);
+}
+
+.headerone {
+  grid-area: header1;
+  font-size: 16px;
+  color: var(--clr-text-light);
+  margin: auto;
+  font-weight: 600;
+}
+
+.headertwo {
+  grid-area: header2;
+  font-size: 16px;
+  color: var(--clr-text-light);
+  margin: auto;
+  font-weight: 600;
+}
+
+.title-box {
+  grid-area: title;
+  text-align: center;
+  padding: 80px 30px 0 50px;
+  color: var(--clr-text-light);
+  max-height: max-content;
+}
+
+.titlepage-title {
+  font-size: 100px;
+  font-weight: 100;
+  margin-top: 70px;
+  line-height: 1;
+}
+
+.titlepage-title2 {
+  font-size: 100px;
+  font-weight: 600;
+  line-height: 1;
+  margin-bottom: 100px;
+  color: rgb(90, 170, 45, 1);
+}
+
+.titlepage-subtitle {
+  font-size: 25px;
+  font-weight: 400;
+}
+
+.image-stack {
+  grid-area: gall;
+  display: grid;
+  position: relative;
+  padding: 0 30px;
+  grid-template-columns: repeat(12, 1fr);
+  grid-template-rows: repeat(16, 6.25vh);
+}
+
+.cinq-bottom {
+  grid-row: 2;
+  grid-column: 4 / span 8;
+  width: 100%;
+  display: block;
+  border: 8px solid white;
+  box-shadow: 3px 3px 1rem rgba(0, 0, 0, 0.4), -3px -3px 1rem rgba(0, 0, 0, 0.4);
+}
+
+.crow-mid {
+  grid-row: 7;
+  grid-column: 5 / span 6;
+  z-index: 1;
+  width: 100%;
+  display: block;
+  border: 8px solid white;
+  box-shadow: 3px 3px 1rem rgba(0, 0, 0, 0.4), -3px -3px 1rem rgba(0, 0, 0, 0.4);
+}
+
+.map-top {
+  grid-row: 5;
+  grid-column: 1 / span 7;
+  z-index: 2;
+  width: 100%;
+  display: block;
+  border: 8px solid white;
+  box-shadow: 3px 3px 1rem rgba(0, 0, 0, 0.4), -3px -3px 1rem rgba(0, 0, 0, 0.4);
+}
+
+
+
+
+
+
+
+
+
+
+/* Intro summary box */
+
+.intro-box {
+  display: grid;
+  grid-column-gap: 4%;
+  grid-template-columns: 43% 53%;
+  grid-template-areas: 
+    "intitle intitle"
+    "mapb maptext"
+    "bar bar"
+}
+
+.intro-title {
+  grid-area: intitle;
+  font-size: 50px;
+  font-weight: 500;
+  color: var(--clr-text-light);
+  background-image: linear-gradient(100deg, var(--clr-opaque-purple), var(--clr-opaque-blue));
+  border-radius: 1rem;
+  box-shadow: 3px 3px 1rem rgba(0, 0, 0, 0.4);
+  padding: 40px;
+  width: 100%;
+  margin-bottom: 50px;
+  text-align: left;
+  line-height: 1.3;
+}
+
+.intro-subtitle {
+  font-size: 30px;
+  color: var(--clr-base-green);
+}
+
+.sitemap {
+  grid-area: mapb;
+  background-color: var(--clr-opaque-purple);
+  width: 100%;
+  padding: 3px 16px 0 11px;
+  margin: auto;
+  border-radius: 1rem;
+  box-shadow: 3px 3px 1rem rgba(0, 0, 0, 0.4);
+}
+
+.intro-textbox {
+  grid-area: maptext;
+  height: 98%;
+  width: 100%;
+  border-radius: 1rem;
+  box-shadow: 3px 3px 1rem rgba(0, 0, 0, 0.4);
+  padding: 20px;
+  background-color: var(--clr-opaque-green);
+  color: var(--clr-text-light);
+  font-size: 20px;
+  font-weight: 400;
+  text-align: center;
+  margin: auto;
+  display: grid;
+  grid-template-columns: 50% 50%;
+  grid-template-areas: 
+    "yos sites"
+    "cells duration"
+}
+
+.highlight-text {
+  font-size: 50px;
+  font-weight: 600;
+}
+
+.num-sites {
+  grid-area: sites;
+  padding: 2.8vw;
+  border-left: 1px solid var(--clr-base-purple);
+  border-bottom: 1px solid var(--clr-base-purple);
+}
+
+.study-year {
+  grid-area: yos;
+  padding: 2.8vw;
+  border-right: 1px solid var(--clr-base-purple);
+  border-bottom: 1px solid var(--clr-base-purple);
+}
+
+.num-cells {
+  grid-area: cells;
+  padding: 2.8vw;
+  border-right: 1px solid var(--clr-base-purple);
+  border-top: 1px solid var(--clr-base-purple);
+}
+
+.survey-duration {
+  grid-area: duration;
+  padding: 2.8vw;
+  border-left: 1px solid var(--clr-base-purple);
+  border-top: 1px solid var(--clr-base-purple);
+}
+
+.barbox {
+  grid-area: bar;
+  border-radius: 1rem;
+  box-shadow: 3px 3px 1rem rgba(0, 0, 0, 0.4);
+  padding: 20px;
+  margin-top: 50px;
+  background-color: var(--clr-opaque-blue);
+  color: var(--clr-text-light);
+  display: grid;
+  grid-column-gap: 4%;
+  grid-template-columns: 48% 48%;
+  grid-template-areas: 
+    "bartitle bartitle"
+    "bartext barplot"
+}
+
+.bartitle {
+  grid-area: bartitle;
+  font-size: 30px;
+  font-weight: 500;
+  color: var(--clr-text-dark);
+  text-align: center;
+  margin-bottom: 30px
+}
+
+.bartable {
+  grid-area: bartext;
+  color: var(--clr-text-dark);
+  font-size: 20px;
+}
+
+.barplot {
+  grid-area: barplot;
+  margin: auto;
+  max-height: 464px;
+  box-shadow: 3px 3px 1rem rgba(0, 0, 0, 0.4);
+}
+
+
+
+
+
+
+
+
+/* Species data box */
+
+.species-box {
+  display: grid;
+  grid-template-areas: 
+    "intitle"
+    "species"
+}
+
+.species-stats {
+  grid-area: species;
+  background-color: var(--clr-opaque-blue);
+  padding: 20px;
+  border-radius: 1rem;
+  box-shadow: 3px 3px 1rem rgba(0, 0, 0, 0.4);
+  display: grid;
+  grid-column-gap: 4%;
+  grid-template-columns: 48% 48%;
+  grid-template-areas: 
+    "titl titl"
+    "cinqb crowb"
+}
+
+.species-title {
+  grid-area: titl;
+  font-size: 30px;
+  font-weight: 500;
+  margin-bottom: 30px;
+  text-align: center;
+  color: var(--clr-text-dark);
+}
+
+.crowbox {
+  grid-area: crowb;
+  background-color: var(--clr-opaque-purple);
+  color: var(--clr-text-light);
+  padding: 20px;
+  border-radius: 1rem;
+  box-shadow: 3px 3px 1rem rgba(0, 0, 0, 0.4);
+  display: grid;
+  grid-template-columns: 100%;
+  grid-template-areas: 
+    "tcrow"
+    "crow"
+    "crowtext"
+}
+
+.cinqbox {
+  grid-area: cinqb;
+  background-color: var(--clr-opaque-green);
+  color: var(--clr-text-light);
+  padding: 20px;
+  border-radius: 1rem;
+  box-shadow: 3px 3px 1rem rgba(0, 0, 0, 0.4);
+  display: grid;
+  grid-template-columns: 100%;
+  grid-template-areas: 
+    "tcinq"
+    "cinq"
+    "cinqtext"
+}
+
+.crowtitle {
+  grid-area: tcrow;
+  text-align: center;
+  font-size: 30px;
+  font-weight: 500;
+  margin-bottom: 20px;
+}
+
+.cinqtitle {
+  grid-area: tcinq;
+  text-align: center;
+  font-size: 30px;
+  font-weight: 500;
+  margin-bottom: 20px;
+}
+
+.spep {
+  font-size: 25px;
+  font-weight: 400;
+}
+
+.crowpic {
+  grid-area: crow;
+  margin: 0 auto;
+  max-width: 40%;
+  min-width: 175px;
+  border-radius: 50%;
+  object-fit: cover;
+  aspect-ratio: 1/1;
+  box-shadow: 3px 3px 1rem rgba(0, 0, 0, 0.4);
+}
+
+.cinqpic {
+  grid-area: cinq;
+  margin: 0 auto;
+  max-width: 40%;
+  min-width: 175px;
+  border-radius: 50%;
+  object-fit: cover;
+  aspect-ratio: 1/1;
+  box-shadow: 3px 3px 1rem rgba(0, 0, 0, 0.4);
+}
+
+.crow-text {
+  grid-area: crowtext;
+  color: var(--clr-text-light);
+  text-align: center;
+  display: grid;
+  grid-template-columns: 50% 50%;
+  grid-template-areas:
+    "arrowleft arrowright"
+    "ref       nonref"
+}
+
+.cinq-text {
+  grid-area: cinqtext;
+  color: var(--clr-text-light);
+  text-align: center;
+  display: grid;
+  grid-template-columns: 50% 50%;
+  grid-template-areas:
+    "arrowleft arrowright"
+    "ref       nonref"
+}
+
+.arrowright {
+  grid-area: arrowright;
+  text-align: left;
+  padding-left: 50px;
+}
+
+.arrowleft {
+  grid-area: arrowleft;
+  text-align: right;
+  padding-right: 50px;
+}
+
+.rotatepos {
+  rotate: -145deg;
+}
+
+.rotateneg {
+  rotate: 145deg;
+}
+
+.ref-text {
+  grid-area: ref;
+  font-size: 30px;
+  font-weight: 500;
+  margin: auto;
+}
+
+.nonref-text {
+  grid-area: nonref;
+  font-size: 30px;
+  font-weight: 500;
+  margin: auto;
+}
+
+.ref-perc {
+  font-size: 50px;
+}
+
+
+
+
+
+
+
+
+
+
+
+/* Media query styling */
+
+@media screen and (max-width: 440px) {
+  
+  .bodybody {
+    margin-left: 15px;
+    margin-right: 15px;
+    padding: 0;
+  }
+  
+  .body-box {
+    padding: 15px;
+  }
+  
+  .titlepage-box {
+    grid-template-columns: 100%;
+    grid-template-rows: 57% 43%;
+    grid-template-areas: 
+      "header"
+      "gall"
+  }
+  
+  .primary-header {
+    margin: 15px;
+    grid-template-columns: 33% 33% 33%;
+    grid-template-rows: 16% 84%;
+    grid-template-areas:
+        "logo  header1 header2"
+        "title title   title";
+  }
+  
+  .cs-logo {
+    justify-self: center;
+  }
+  
+  .title-box {
+    padding: 0;
+  }
+  
+  .titlepage-title {
+    margin-top: 40px;
+    font-size: 60px;
+  }
+  
+  .titlepage-title2 {
+    font-size: 60px;
+  }
+  
+  .titlepage-subtitle {
+    font-size: 18px;
+  }
+  
+  .image-stack {
+    padding: 0 20px;
+    grid-template-rows: repeat(16, 2.8vh);
+    margin-bottom: 20px;
+  }
+  
+  .cinq-bottom {
+    grid-row: 1;
+  }
+  
+  .crow-mid {
+    grid-row: 6;
+    grid-column: 3 / span 6;
+    rotate: 90deg;
+  }
+  
+  .map-top {
+    grid-row: 4;
+  }
+  
+  .intro-box {
+    grid-row-gap: 50px;
+    grid-template-columns: 100%;
+    grid-template-areas:
+        "intitle"
+        "mapb"
+        "maptext"
+        "bar"
+  }
+  
+  .intro-title {
+    margin: 0;
+    padding: 15px;
+    font-size: 40px;
+  }
+  
+  .barbox {
+    margin: 0;
+    display: grid;
+    grid-row-gap: 30px;
+    grid-template-columns: 100%;
+    grid-template-areas:
+        "bartitle"
+        "barplot"
+        "bartext"
+  }
+  
+  .bartitle {
+    margin: 0;
+  }
+  
+  .species-box {
+    grid-row-gap: 50px;
+    grid-template-columns: 100%;
+  }
+  
+  .species-stats {
+    display: grid;
+    grid-row-gap: 30px;
+    grid-template-columns: 100%;
+    grid-template-areas:
+        "titl"
+        "cinqb"
+        "crowb"
+  }
+  
+  .species-stats {
+    margin: 0;
+  }
+  
+  .arrowleft {
+    padding-right: 3vw;
+  }
+  
+  .arrowright {
+    padding-left: 3vw;
+  }
+  
+}
+
+
+
+@media screen and (max-width: 600px) {
+  
+  .intro-img-box {
+    grid-template-columns: 100%;
+    grid-template-areas: 
+      "inat"
+      "ebird"
+  }
+  
+  .credits-box {
+    grid-row-gap: 30px;
+    grid-template-columns: 100%;
+    grid-template-areas: 
+      "images"
+      "text"
+  }
+  
+  .inat-logo {
+    margin-top: 20px;
+    margin-bottom: 10px;
+  }
+  
+  .ebird-logo {
+    margin-top: 10px;
+    margin-bottom: 20px;
+  }
+  
+}
+
+
+@media screen and (max-width: 1030px) {
+  
+ 
+  
+  
+}
