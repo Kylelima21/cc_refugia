@@ -13,12 +13,12 @@ library(lubridate)
 ####             Read and clean               ####
 #------------------------------------------------#
 
-cleandat <- tibble(read.csv("data/refugia_data_export_20230703.csv")) %>%
+cleandat <- tibble(read.csv("data/refugia_export_20230716.csv")) %>%
   rename_with(., ~tolower(.)) %>%
   select(-c(objectid, creationdate:editor, survey.point.id)) %>% 
   rename(global.id = globalid,
          start.time = survey.start.time,
-         other.observers = other.group.member.initials,
+         group.size = how.many.people.are.in.your.group.,
          crowberry.present = is.black.crowberry.present.,
          num.cells.crowberry = how.many.of.the.grid.cells.contain.crowberry.,
          num.cells.crowberry.flowers = how.many.of.the.grid.cells.contain.crowberry.flowers.,
@@ -38,8 +38,7 @@ cleandat <- tibble(read.csv("data/refugia_data_export_20230703.csv")) %>%
   mutate(survey.date = str_remove(survey.date, "\\s\\d\\:\\d*\\:\\d*\\s\\w*$"),
          survey.date = as.Date(survey.date, format = "%m/%d/%Y"),
          year = as.integer(year(survey.date)),
-         recorder.initials = toupper(recorder.initials),
-         other.observers = toupper(other.observers),
+         group.size = as.numeric(group.size),
          crowberry.present = tolower(crowberry.present),
          cinquefoil.present = tolower(cinquefoil.present),
          site.code = toupper(site.code),
@@ -49,8 +48,9 @@ cleandat <- tibble(read.csv("data/refugia_data_export_20230703.csv")) %>%
          site.code = str_replace(site.code, "CABO", "CABA"),
          grid.cell.number = as.integer(grid.cell.number)) %>% 
   select(site.code, grid.cell.number, latitude, longitude, survey.date, year, 
-         start.time, end.time, recorder.initials:notes, global.id) %>% 
+         start.time, end.time, group.size:notes, global.id) %>% 
   arrange(site.code, survey.date, start.time)
+
 
 
 
@@ -117,12 +117,6 @@ table(cnr$cinquefoil.present)
 cnn <- cleandat %>% 
   filter(site.code == "CABA")
 table(cnn$cinquefoil.present)
-
-
-
-
-
-
 
 
 
