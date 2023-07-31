@@ -118,8 +118,8 @@ bardat <- read.csv("index/www/data/site_locations.csv") %>%
          cells = 0) %>% 
   left_join(barsum, by = "site.code") %>% 
   tibble() %>% 
-  mutate(cells = cells.x + cells.y,
-         cells = replace(cells, is.na(cells), 0)) %>% 
+  mutate(cells = cells.x + cells.y) %>% 
+         #cells = replace(cells, is.na(cells), 0)) %>% 
   dplyr::select(site.code, cells)
 
 ## Create ggplot
@@ -240,7 +240,7 @@ cnn <- cleandat %>%
   <div>Summary</div>
   </div>
   <div class = "titlepage-subtitle">
-  Current results from the Climate Change Refugia project made possible by Earthwatch groups like   you!
+  Current results from the Climate Change Refugia project made possible by Earthwatch groups like you!
   </div>
   </div>
   
@@ -261,15 +261,39 @@ cnn <- cleandat %>%
 
 <!-- Body Content -->
 <div class = "bodybody">
+
+  <!-- Species box -->
+  <div class = "body-box species-box">
+  
+  <div class = "intro-title">
+  Project Background
+  </div>
+  
+  <div class = "photobox">
+  <div class = "fotecrow">
+  <img src="index/www/img/crow_h.png" alt="a picture of black crowberry, one of the focal species">
+  </div>    
+  <div class = "fotemap">
+  <img src="index/www/img/crowmap.png" alt="a map of modeled refugia which are along the coast and on   mountain summits">
+  </div>
+  <div class = "fotecinq">
+  <img src="index/www/img/cinq.png" alt="a picture of three-toothed cinquefoil, one of the focal species">
+  </div>
+  </div>
+  
+  <div class = "descripbox">
+  This study monitors black crowberry (<i>Empetrum nigrum</i>) and three-toothed cinquefoil (<i>Sibbaldiopsis tridentata</i>) populations in areas identified as refugia and compares these to populations in non-refugia sites. Refugia are regions that remain relatively buffered from climate change, and allow for the persistence of native species that would otherwise become locally extinct. It is important to determine refugia locations to better monitor our native species over time. These species are also considered arctic disjunct; plants that typically grow further north in cooler arctic tundra or alpine environments, but have some separate populations further south. The Acadia National Park region has the potential to support these species under future climate conditions because of the narrower temperature range due to the elevation and proximity to the ocean and has been protected from development.
+  </div>
+  
+  </div>
+  
+  
   
   <!-- Intro summary box -->
   <div class = "body-box intro-box">
   
   <div class = "intro-title">
-  PROGRESS OVERVIEW
-  <div class = "intro-subtitle">
-  `r year(Sys.Date())`
-  </div>
+  `r year(Sys.Date())` Progress Overview
   </div>
   
   <div class = "sitemap">
@@ -319,7 +343,7 @@ cnn <- cleandat %>%
   <div class = "body-box species-box">
   
   <div class = "intro-title">
-  SPECIES BREAKDOWN
+  Species Breakdown
   </div>
   
   <div class = "species-stats">
