@@ -664,23 +664,50 @@ ol[role="list"] {
   .image-stack {
     padding: 0 20px;
     grid-template-rows: repeat(16, 2.8vh);
-    margin-bottom: 20px;
+    margin: 20px 0;
   }
   
   .cinq-bottom {
     grid-row: 1;
+    border: 4px solid white;
   }
   
   .crow-mid {
     grid-row: 6;
-    grid-column: 3 / span 6;
+    grid-column: 5 / span 6;
     rotate: 90deg;
+    border: 4px solid white;
   }
   
   .map-top {
     grid-row: 4;
+    border: 4px solid white;
   }
   
+  .photobox {
+    display: grid;
+    grid-column-gap: 4%;
+    grid-row-gap: 20px;
+    grid-template-columns: 48% 48%;
+    grid-template-areas: 
+      "map  map"
+      "crow cinq"
+  }
+  
+  .fotemap {
+    border: 4px solid white;
+    max-width: 50%;
+    margin: auto;
+  }
+  
+  .fotecinq {
+    border: 4px solid white;
+  }
+  
+  .fotecrow {
+    border: 4px solid white;
+  }
+
   .intro-box {
     grid-row-gap: 50px;
     grid-template-columns: 100%;
@@ -737,6 +764,14 @@ ol[role="list"] {
   
   .arrowright {
     padding-left: 3vw;
+  }
+  
+  .rotatepos {
+    rotate: -160deg;
+  }
+  
+  .rotateneg {
+    rotate: 160deg;
   }
   
 }
