@@ -256,25 +256,31 @@ ol[role="list"] {
     "crow map cinq"
 }
 
+.foteimg {
+  height: 100%;
+  width: 100%;
+  background-color: black;
+}
+
 .fotecrow {
   grid-area: crow;
-  width: 100%;
-  border: 8px solid white;
+  border: 2px solid black;
   box-shadow: 3px 3px 1rem rgba(0, 0, 0, 0.4), -3px -3px 1rem rgba(0, 0, 0, 0.4);
+  object-fit: cover;
 }
 
 .fotemap {
   grid-area: map;
-  width: 100%;
-  border: 8px solid white;
+  border: 2px solid black;
   box-shadow: 3px 3px 1rem rgba(0, 0, 0, 0.4), -3px -3px 1rem rgba(0, 0, 0, 0.4);
+  object-fit: cover;
 }
 
 .fotecinq {
   grid-area: cinq;
-  width: 100%;
-  border: 8px solid white;
+  border: 2px solid black;
   box-shadow: 3px 3px 1rem rgba(0, 0, 0, 0.4), -3px -3px 1rem rgba(0, 0, 0, 0.4);
+  object-fit: cover;
 }
 
 .descripbox {

@@ -18,49 +18,8 @@ library(gt)
 
 
 ## Read and clean the raw data
-cleandat <- tibble(read.csv("index/www/data/refugia_export_20230716.csv")) %>%
-  rename_with(., ~tolower(.)) %>%
-  select(-c(objectid, creationdate:editor, survey.point.id)) %>% 
-  rename(global.id = globalid,
-         start.time = survey.start.time,
-         group.size = how.many.people.are.in.your.group.,
-         crowberry.present = is.black.crowberry.present.,
-         num.cells.crowberry = how.many.of.the.grid.cells.contain.crowberry.,
-         num.cells.crowberry.flowers = how.many.of.the.grid.cells.contain.crowberry.flowers.,
-         num.cells.crowberry.fruits = how.many.of.the.grid.cells.contain.crowberry.fruits.,
-         num.cells.crowberry.brleaves = how.many.of.the.grid.cells.contain.brown.crowberry.leaves.,
-         cinquefoil.present = is.three.toothed.cinquefoil.present.,
-         num.cells.cinquefoil = how.many.of.the.grid.cells.contain.cinquefoil.,
-         num.cells.cinquefoil.flowers = how.many.of.the.grid.cells.contain.cinquefoil.flowers.,
-         num.cells.cinquefoil.fruits = how.many.of.the.grid.cells.contain.cinquefoil.fruits.,
-         num.cells.cinquefoil.brleaves = how.many.of.the.grid.cells.contain.brown.cinquefoil.leaves.,
-         end.time = survey.end.time,
-         crowberry.inat = did.you.take.a.picture.of.crowberry.and.upload.it.to.inaturalist.,
-         cinquefoil.inat = did.you.take.a.picture.of.cinquefoil.and.upload.it.to.inaturalist.,
-         notes = notes.,
-         longitude = x,
-         latitude = y) %>% 
-  mutate(survey.date = str_remove(survey.date, "\\s\\d\\:\\d*\\:\\d*\\s\\w*$"),
-         survey.date = as.Date(survey.date, format = "%m/%d/%Y"),
-         year = as.integer(year(survey.date)),
-         group.size = as.numeric(group.size),
-         crowberry.present = tolower(crowberry.present),
-         cinquefoil.present = tolower(cinquefoil.present),
-         site.code = toupper(site.code),
-         site.code = str_replace(site.code, "BMSI", "BMIS"),
-         site.code = str_replace(site.code, "MDIS", "BMIS"),
-         site.code = str_replace(site.code, "CABZ", "CABA"),
-         site.code = str_replace(site.code, "CABO", "CABA"),
-         grid.cell.number = as.integer(grid.cell.number)) %>% 
-  select(site.code, grid.cell.number, latitude, longitude, survey.date, year, 
-         start.time, end.time, group.size:notes, global.id) %>% 
-  arrange(site.code, survey.date, start.time)
+cleandat <- tibble(read.csv("index/www/data/rmd_data.csv"))
 
-
-
-#------------------------------------------------#
-####              Summary Stats               ####
-#------------------------------------------------#
 
 ### Map of sites surveyed
 ## Get basemap
@@ -262,21 +221,20 @@ cnn <- cleandat %>%
 <!-- Body Content -->
 <div class = "bodybody">
 
-  <!-- Species box -->
+  <!-- Background box -->
   <div class = "body-box species-box">
   
   <div class = "intro-title">
   Project Background
   </div>
-  
   <div class = "photobox">
-  <div class = "fotecrow">
+  <div class = "fotecrow foteimg">
   <img src="index/www/img/crow_h.png" alt="a picture of black crowberry, one of the focal species">
   </div>    
-  <div class = "fotemap">
+  <div class = "fotemap foteimg">
   <img src="index/www/img/crowmap.png" alt="a map of modeled refugia which are along the coast and on   mountain summits">
   </div>
-  <div class = "fotecinq">
+  <div class = "fotecinq foteimg">
   <img src="index/www/img/cinq.png" alt="a picture of three-toothed cinquefoil, one of the focal species">
   </div>
   </div>
@@ -313,7 +271,7 @@ cnn <- cleandat %>%
   </div>
   <div class = "num-cells"> 
   <svg xmlns="http://www.w3.org/2000/svg" height="1.5em" viewBox="0 0 512 512"><!--! Font Awesome Free 6.4.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license (Commercial License) Copyright 2023 Fonticons, Inc. --><path d="M448 96V224H288V96H448zm0 192V416H288V288H448zM224 224H64V96H224V224zM64 288H224V416H64V288zM64 32C28.7 32 0 60.7 0 96V416c0 35.3 28.7 64 64 64H448c35.3 0 64-28.7 64-64V96c0-35.3-28.7-64-64-64H64z"/></svg>
-  <div class = "highlight-text"> `r n_distinct(celldat$grid.cell.number)` </div>
+  <div class = "highlight-text"> `r nrow(celldat)` </div>
   total cells surveyed
   </div>
   <div class = "survey-duration"> 
@@ -369,13 +327,13 @@ cnn <- cleandat %>%
   <div class = "ref-text">
   Refugia
   <div class = "ref-perc">
-  `r round(length(cbr$crowberry.present)/n_distinct(refcells$grid.cell.number)*100, digits = 0)`%
+  `r round(nrow(cbr)/nrow(refcells)*100, digits = 0)`%
   </div>
   </div>
   <div class = "nonref-text">
   Non-refugia
   <div class = "ref-perc">
-  `r round(length(cbn$crowberry.present)/n_distinct(refcells$grid.cell.number)*100, digits = 0)`%
+  `r round(nrow(cbn)/nrow(nonrefcells)*100, digits = 0)`%
   </div>
   </div>
   </div> 
@@ -398,13 +356,13 @@ cnn <- cleandat %>%
   <div class = "ref-text">
   Refugia
   <div class = "ref-perc">
-  `r round(length(cnr$cinquefoil.present)/n_distinct(refcells$grid.cell.number)*100, digits = 0)`%
+  `r round(nrow(cnr)/nrow(refcells)*100, digits = 0)`%
   </div>
   </div>
   <div class = "nonref-text">
   Non-refugia
   <div class = "ref-perc">
-  `r round(length(cnn$cinquefoil.present)/n_distinct(refcells$grid.cell.number)*100, digits = 0)`%
+  `r round(nrow(cnn)/nrow(nonrefcells)*100, digits = 0)`%
   </div>
   </div>
   </div> 
