@@ -14,7 +14,7 @@ library(ggmap)
 ####             Read and clean               ####
 #------------------------------------------------#
 
-rdata <- tibble(read.csv("data/refugia_export_20230804.csv"))
+rdata <- tibble(read.csv("data/refugia_export_20230815.csv"))
   
   
 cleandata <- rdata %>% 
@@ -51,6 +51,7 @@ cleandata <- rdata %>%
          site.code = str_replace(site.code, "CABZ", "CABA"),
          site.code = str_replace(site.code, "CABO", "CABA"),
          site.code = str_replace(site.code, "SEMO", "SCMO"),
+         site.code = str_replace(site.code, "SCHA", "SCHE"),
          grid.cell.number = as.integer(grid.cell.number)) %>% 
   select(site.code, grid.cell.number, latitude, longitude, survey.date, year, 
          start.time, end.time, group.size:notes, global.id) %>% 
@@ -64,7 +65,8 @@ cleandata <- rdata %>%
 #------------------------------------------------#
 
 ## Ensure no duplicate grid cell numbers
-cleandata %>% 
+text <- cleandata %>% 
+  group_by(site.code) %>% 
   distinct(.$grid.cell.number)
 
 cleandata %>% 
@@ -72,7 +74,7 @@ cleandata %>%
   distinct(.$grid.cell.number)
 
 cleandata %>% 
-  duplicated(grid.cell.number)
+  duplicated(.$grid.cell.number)
 
 ## Check for erroneous site.code entries
 cleandata %>% 
