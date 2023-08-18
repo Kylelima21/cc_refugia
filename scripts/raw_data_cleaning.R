@@ -51,7 +51,7 @@ cleandata <- rdata %>%
          site.code = str_replace(site.code, "CABZ", "CABA"),
          site.code = str_replace(site.code, "CABO", "CABA"),
          site.code = str_replace(site.code, "SEMO", "SCMO"),
-         site.code = str_replace(site.code, "SCHA", "SCHE"),
+         site.code = str_replace(site.code, "SCHA", "SHHA"),
          grid.cell.number = as.integer(grid.cell.number)) %>% 
   select(site.code, grid.cell.number, latitude, longitude, survey.date, year, 
          start.time, end.time, group.size:notes, global.id) %>% 
