@@ -14,7 +14,7 @@ library(ggmap)
 ####             Read and clean               ####
 #------------------------------------------------#
 
-rdata <- tibble(read.csv("data/refugia_export_20230815.csv"))
+rdata <- tibble(read.csv("data/refugia_export_20230904.csv"))
   
   
 cleandata <- rdata %>% 
@@ -51,11 +51,17 @@ cleandata <- rdata %>%
          site.code = str_replace(site.code, "CABZ", "CABA"),
          site.code = str_replace(site.code, "CABO", "CABA"),
          site.code = str_replace(site.code, "SEMO", "SCMO"),
+         site.code = str_replace(site.code, "SCHD", "SCHE"),
          site.code = str_replace(site.code, "SCHA", "SHHA"),
+         site.code = str_replace(site.code, "SHHE", "SHHA"),
+         site.code = str_replace(site.code, "SSHE", "SHHA"),
+         site.code = str_replace(site.code, "BLHL", "BLHI"),
          grid.cell.number = as.integer(grid.cell.number)) %>% 
   select(site.code, grid.cell.number, latitude, longitude, survey.date, year, 
          start.time, end.time, group.size:notes, global.id) %>% 
-  arrange(site.code, survey.date, start.time)
+  arrange(site.code, survey.date, start.time) %>%
+  mutate(grid.cell.number = ifelse(global.id == "6ba77df0-86e8-4089-87e9-b9bdf108dd1a",
+                                   46, grid.cell.number))
 
 
 
@@ -73,8 +79,10 @@ cleandata %>%
   filter(site.code == "BEMO") %>% 
   distinct(.$grid.cell.number)
 
-cleandata %>% 
-  duplicated(.$grid.cell.number)
+t <- cleandata %>% 
+  group_by(site.code) %>% 
+  arrange(site.code, grid.cell.number) %>% 
+  
 
 ## Check for erroneous site.code entries
 cleandata %>% 
