@@ -14,7 +14,7 @@ library(ggmap)
 ####             Read and clean               ####
 #------------------------------------------------#
 
-rdata <- tibble(read.csv("data/refugia_export_20230904.csv"))
+rdata <- tibble(read.csv("data/refugia_export_20230918.csv"))
   
   
 cleandata <- rdata %>% 
@@ -82,6 +82,9 @@ cleandata %>%
 t <- cleandata %>% 
   group_by(site.code) %>% 
   arrange(site.code, grid.cell.number) %>% 
+  ungroup() %>% 
+  group_by(site.code, grid.cell.number) %>%
+  filter(n() > 1)
   
 
 ## Check for erroneous site.code entries
