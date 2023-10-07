@@ -34,6 +34,7 @@ sampsites <- cleandat %>%
 
 ## Read in the site location data and add column to specify sampled/unsampled
 mapdat <- read.csv("index/www/data/site_locations.csv") %>%
+  filter(site.code != "otpo") %>% 
   mutate(site.code = toupper(site.code),
          color = ifelse(site.code %in% sampsites$site.code, "Sampled", "Not sampled"))
 
@@ -72,7 +73,7 @@ barsum <- cleandat %>%
   summarise(cells = length(unique(grid.cell.number)))
 
 bardat <- read.csv("index/www/data/site_locations.csv") %>%
-  filter(site != "") %>% 
+  filter(site != "" & site != "otter_point") %>% 
   dplyr::select(site.code) %>% 
   mutate(site.code = toupper(site.code),
          cells = 0) %>% 
@@ -126,27 +127,28 @@ sitefo <- read.csv("index/www/data/refugia_site_info.csv")
 
 ### Number of refugia and non-refugia cells sampled
 refcells <- cleandat %>% 
-  filter(site.code == "BMIS" | site.code == "CAMO" | site.code == "OTPO" | 
-         site.code == "SCHE" | site.code == "SHHA" | site.code == "BLHI") %>% 
+  filter(site.code == "BMIS" | site.code == "CAMO" | site.code == "SCHE" | 
+         site.code == "SHHA" | site.code == "BLHI") %>% 
   filter(year == year(Sys.Date()))
 
 nonrefcells <- cleandat %>% 
   filter(site.code == "ACMO" | site.code == "BEMO" | site.code == "CABA" | 
-         site.code == "PEMO" | site.code == "SCMO") %>% 
+         site.code == "PEMO" | site.code == "SCMO" | site.code == "SCWO") %>% 
   filter(year == year(Sys.Date()))
   
   
 ### Number of cells with crowberry
 ## In refugia site
 cbr <- cleandat %>% 
-  filter(site.code == "BMIS" | site.code == "CAMO" | site.code == "OTPO" | site.code == "SCHE" | site.code == "SHHA" | site.code == "BLHI") %>% 
+  filter(site.code == "BMIS" | site.code == "CAMO" | site.code == "SCHE" |
+         site.code == "SHHA" | site.code == "BLHI") %>% 
   filter(year == year(Sys.Date())) %>% 
   filter(crowberry.present == "yes")
 
 ## in non-refugia site
 cbn <- cleandat %>% 
   filter(site.code == "ACMO" | site.code == "BEMO" | site.code == "CABA" | 
-         site.code == "PEMO" | site.code == "SCMO") %>% 
+         site.code == "PEMO" | site.code == "SCMO" | site.code == "SCWO") %>% 
   filter(year == year(Sys.Date())) %>% 
   filter(crowberry.present == "yes")
 
@@ -154,14 +156,15 @@ cbn <- cleandat %>%
 ### Number of cells with cinquefoil
 ## In refugia site
 cnr <- cleandat %>% 
-  filter(site.code == "BMIS" | site.code == "CAMO" | site.code == "OTPO" | site.code == "SCHE" | site.code == "SHHA" | site.code == "BLHI") %>% 
+  filter(site.code == "BMIS" | site.code == "CAMO" | site.code == "SCHE" |
+         site.code == "SHHA" | site.code == "BLHI") %>% 
   filter(year == year(Sys.Date())) %>% 
   filter(cinquefoil.present == "yes")
 
 ## in non-refugia site
 cnn <- cleandat %>% 
   filter(site.code == "ACMO" | site.code == "BEMO" | site.code == "CABA" | 
-         site.code == "PEMO" | site.code == "SCMO") %>% 
+         site.code == "PEMO" | site.code == "SCMO" | site.code == "SCWO") %>% 
   filter(year == year(Sys.Date())) %>% 
   filter(cinquefoil.present == "yes")
 
@@ -200,7 +203,7 @@ cnn <- cleandat %>%
   <div>Summary</div>
   </div>
   <div class = "titlepage-subtitle">
-  Current results from the Climate Change Refugia project made possible by Earthwatch groups like you!
+  Current results from the Climate Change Refugia project made possible by volunteers like you!
   </div>
   </div>
   

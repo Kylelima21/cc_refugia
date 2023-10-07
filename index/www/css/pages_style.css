@@ -405,7 +405,7 @@ ol[role="list"] {
   color: var(--clr-text-light);
   display: grid;
   grid-column-gap: 4%;
-  grid-template-columns: 48% 48%;
+  grid-template-columns: 42% 54%;
   grid-template-areas: 
     "bartitle bartitle"
     "bartext barplot"
@@ -429,7 +429,7 @@ ol[role="list"] {
 .barplot {
   grid-area: barplot;
   margin: auto;
-  max-height: 464px;
+  max-height: 480px;
   box-shadow: 3px 3px 1rem rgba(0, 0, 0, 0.4);
 }
 
