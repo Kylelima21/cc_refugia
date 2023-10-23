@@ -14,7 +14,7 @@ library(ggmap)
 ####             Read and clean               ####
 #------------------------------------------------#
 
-rdata <- tibble(read.csv("data/refugia_export_20230918.csv"))
+rdata <- tibble(read.csv("data/refugia_export_20231023.csv"))
   
   
 cleandata <- rdata %>% 
