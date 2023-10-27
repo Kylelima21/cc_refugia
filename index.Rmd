@@ -244,7 +244,9 @@ cnn <- cleandat %>%
   </div>
   
   <div class = "descripbox">
-  This study monitors black crowberry (<i>Empetrum nigrum</i>) and three-toothed cinquefoil (<i>Sibbaldiopsis tridentata</i>) populations in areas identified as refugia and compares these to populations in non-refugia sites. Refugia are regions that remain relatively buffered from climate change, and allow for the persistence of native species that would otherwise become locally extinct. It is important to determine refugia locations to better monitor our native species over time. These species are also considered arctic disjunct; plants that typically grow further north in cooler arctic tundra or alpine environments, but have some separate populations further south. The Acadia National Park region has the potential to support these species under future climate conditions because of the narrower temperature range due to the elevation and proximity to the ocean and has been protected from development.
+  This study monitors black crowberry (<i>Empetrum nigrum</i>; left) and three-toothed cinquefoil (<i>Sibbaldiopsis tridentata</i>; right) populations in and out of locations thought to be refugia. What are refugia? Refugia are regions that remain relatively buffered from climate change, therefore allowing for persistence of native species that could otherwise become locally extinct. It is important to determine refugia so we can better monitor and manage our native species, especially for populations outside of these identified refugia. 
+  <br>
+  Cinquefoil and crowberry are considered arctic disjunct plants, meaning that they typically grow in northern arctic tundra or alpine environments, but have some separate populations further south. The Acadia National Park region has the potential to continue supporting these species under future climate conditions because of the more stable and cooler temperature range that exists on mountain summits and along the coast, as well as being in or near a national park.
   </div>
   
   </div>
