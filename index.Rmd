@@ -23,9 +23,9 @@ cleandat <- tibble(read.csv("index/www/data/rmd_data.csv"))
 
 ### Map of sites surveyed
 ## Get basemap
-acad.reg <- get_stamenmap(bbox = c(left = -68.55, bottom = 44.19,
-                                  right = -67.93, top = 44.62),
-                          zoom = 10)
+# acad.reg <- get_stamenmap(bbox = c(left = -68.55, bottom = 44.19,
+#                                   right = -67.93, top = 44.62),
+#                           zoom = 10)
 
 ## Determine which sites have been sampled this year from the cleaned data
 sampsites <- cleandat %>%
@@ -43,24 +43,24 @@ cols <- c("Not sampled" = "#330033", "Sampled" = "#489619")
 shape <- c("Not sampled" = 23, "Sampled" = 21)
 
 ## ggmap it
-ggmap(acad.reg) +
-  geom_point(aes(x = longitude, y = latitude, fill = color, shape = color), size = 3.5,
-             data = mapdat, color = "white") +
-  theme_bw() +
-  scale_fill_manual(values = cols) +
-  scale_shape_manual(values = shape) +
-  theme(axis.text = element_blank(),
-        axis.ticks = element_blank(),
-        axis.title = element_blank(),
-        plot.background = element_blank(),
-        panel.background = element_blank(),
-        legend.position = c(0.85, 0.1),
-        legend.title = element_blank(),
-        legend.text = element_text(size = 12, color = "black"),
-        legend.background = element_blank())
+# ggmap(acad.reg) +
+#   geom_point(aes(x = longitude, y = latitude, fill = color, shape = color), size = 3.5,
+#              data = mapdat, color = "white") +
+#   theme_bw() +
+#   scale_fill_manual(values = cols) +
+#   scale_shape_manual(values = shape) +
+#   theme(axis.text = element_blank(),
+#         axis.ticks = element_blank(),
+#         axis.title = element_blank(),
+#         plot.background = element_blank(),
+#         panel.background = element_blank(),
+#         legend.position = c(0.85, 0.1),
+#         legend.title = element_blank(),
+#         legend.text = element_text(size = 12, color = "black"),
+#         legend.background = element_blank())
 
 ## save as PNG for reading in
-ggsave("index/www/img/sitemap.png", height = 6, width = 6, dpi = 600)
+# ggsave("index/www/img/sitemap.png", height = 6, width = 6, dpi = 600)
 
 
 
@@ -121,7 +121,10 @@ survey.dur <- cleandat %>%
 
 
 ### Site info table
-sitefo <- read.csv("index/www/data/refugia_site_info.csv")
+sitefo <- read.csv("index/www/data/refugia_site_info.csv") %>% 
+  filter(site.code != "OTPO") %>% 
+  arrange(site)
+  
 
 
 
@@ -246,7 +249,7 @@ cnn <- cleandat %>%
   <div class = "descripbox">
   This study monitors black crowberry (<i>Empetrum nigrum</i>; left) and three-toothed cinquefoil (<i>Sibbaldiopsis tridentata</i>; right) populations in and out of locations thought to be refugia. What are refugia? Refugia are regions that remain relatively buffered from climate change, therefore allowing for persistence of native species that could otherwise become locally extinct. It is important to determine refugia so we can better monitor and manage our native species, especially for populations outside of these identified refugia. 
   <br>
-  Cinquefoil and crowberry are considered arctic disjunct plants, meaning that they typically grow in northern arctic tundra or alpine environments, but have some separate populations further south. The Acadia National Park region has the potential to continue supporting these species under future climate conditions because of the more stable and cooler temperature range that exists on mountain summits and along the coast, as well as being in or near a national park.
+  Cinquefoil and crowberry are considered arctic disjunct plants, meaning that they typically grow in northern arctic tundra or alpine environments, but have some separate populations further south. The Acadia National Park region has the potential to continue supporting these species under future climate conditions because of the more stable and cooler temperature range that exists on mountain summits and along the coast.
   </div>
   
   </div>
