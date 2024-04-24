@@ -10,6 +10,7 @@ library(lubridate)
 library(ggmap)
 
 
+
 #------------------------------------------------#
 ####             Read and clean               ####
 #------------------------------------------------#
@@ -99,6 +100,10 @@ cleandata %>%
 #------------------------------------------------#
 
 write.csv(cleandata, "index/www/data/rmd_data.csv", row.names = F)
+
+
+
+
 
 
 
