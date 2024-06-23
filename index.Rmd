@@ -13,7 +13,7 @@ library(lubridate)
 library(ggmap)
 library(kableExtra)
 library(gt)
-#library(htmltools)
+library(leaflet)
 #library(sf)
 
 
@@ -34,13 +34,13 @@ sampsites <- cleandat %>%
 
 ## Read in the site location data and add column to specify sampled/unsampled
 mapdat <- read.csv("index/www/data/site_locations.csv") %>%
-  filter(site.code != "otpo") %>% 
+  filter(site.code != "otpo" & site.code != "scmo") %>% 
   mutate(site.code = toupper(site.code),
          color = ifelse(site.code %in% sampsites$site.code, "Sampled", "Not sampled"))
 
 ## Specify colors and shapes for the map
-cols <- c("Not sampled" = "#330033", "Sampled" = "#489619")
-shape <- c("Not sampled" = 23, "Sampled" = 21)
+# cols <- c("Not sampled" = "#330033", "Sampled" = "#489619")
+# shape <- c("Not sampled" = 23, "Sampled" = 21)
 
 ## ggmap it
 # ggmap(acad.reg) +
@@ -63,6 +63,26 @@ shape <- c("Not sampled" = 23, "Sampled" = 21)
 # ggsave("index/www/img/sitemap.png", height = 6, width = 6, dpi = 600)
 
 
+species_leaflet <- function (x) {
+  
+  formap <- x 
+
+  # maxLong = max(formap$longitude) + 0.1
+  # maxLat = max(formap$latitude) + 0.1
+  # minLong = min(formap$longitude) - 0.1
+  # minLat = min(formap$latitude) - 0.1
+  
+  map <- leaflet(options = leafletOptions(zoomControl = FALSE)) %>% 
+    addProviderTiles(providers$Esri.WorldImagery) %>% 
+    #addProviderTiles(providers$Stamen.TonerLines, options = providerTileOptions(opacity = 0.35)) %>% 
+    #addProviderTiles(providers$Stamen.TerrainLabels) %>%
+    #addProviderTiles(providers$CartoDB.PositronOnlyLabels) %>% 
+    addMarkers(formap$longitude, formap$latitude, label = formap$site) #%>%
+    #fitBounds(minLong, minLat, maxLong, maxLat)
+  
+  return(map)
+}
+
 
 
 ### Number of grid cells sampled
@@ -73,7 +93,7 @@ barsum <- cleandat %>%
   summarise(cells = length(unique(grid.cell.number)))
 
 bardat <- read.csv("index/www/data/site_locations.csv") %>%
-  filter(site != "" & site != "otter_point") %>% 
+  filter(site != "" & site != "otter_point" & site != "schoodic_mountain") %>% 
   dplyr::select(site.code) %>% 
   mutate(site.code = toupper(site.code),
          cells = 0) %>% 
@@ -107,12 +127,13 @@ ggsave("index/www/img/cellbd.png", height = 6, width = 8, dpi = 600)
 
 
 ### Number of cells sampled
-celldat <- cleandat %>% 
-  filter(year == year(Sys.Date()))
+celldat <- cleandat #%>% 
+  #filter(year == year(Sys.Date()))
+
 
 ### Average duration of survey
 survey.dur <- cleandat %>% 
-  filter(year == year(Sys.Date())) %>% 
+  #filter(year == year(Sys.Date())) %>% 
   mutate(start.time = as.numeric(str_remove(start.time, "\\:")),
          end.time = as.numeric(str_remove(end.time, "\\:")),
          avg.sl = end.time - start.time) %>% 
@@ -123,6 +144,7 @@ survey.dur <- cleandat %>%
 ### Site info table
 sitefo <- read.csv("index/www/data/refugia_site_info.csv") %>% 
   filter(site.code != "OTPO") %>% 
+  filter(site.code != "SCMO") %>% 
   arrange(site)
   
 
@@ -131,13 +153,13 @@ sitefo <- read.csv("index/www/data/refugia_site_info.csv") %>%
 ### Number of refugia and non-refugia cells sampled
 refcells <- cleandat %>% 
   filter(site.code == "BMIS" | site.code == "CAMO" | site.code == "SCHE" | 
-         site.code == "SHHA" | site.code == "BLHI") %>% 
-  filter(year == year(Sys.Date()))
+         site.code == "SHHA" | site.code == "BLHI") #%>% 
+  #filter(year == year(Sys.Date()))
 
 nonrefcells <- cleandat %>% 
   filter(site.code == "ACMO" | site.code == "BEMO" | site.code == "CABA" | 
-         site.code == "PEMO" | site.code == "SCMO" | site.code == "SCWO") %>% 
-  filter(year == year(Sys.Date()))
+         site.code == "PEMO" | site.code == "SCMO" | site.code == "SCWO") #%>% 
+  #filter(year == year(Sys.Date()))
   
   
 ### Number of cells with crowberry
@@ -145,14 +167,14 @@ nonrefcells <- cleandat %>%
 cbr <- cleandat %>% 
   filter(site.code == "BMIS" | site.code == "CAMO" | site.code == "SCHE" |
          site.code == "SHHA" | site.code == "BLHI") %>% 
-  filter(year == year(Sys.Date())) %>% 
+  #filter(year == year(Sys.Date())) %>% 
   filter(crowberry.present == "yes")
 
 ## in non-refugia site
 cbn <- cleandat %>% 
   filter(site.code == "ACMO" | site.code == "BEMO" | site.code == "CABA" | 
          site.code == "PEMO" | site.code == "SCMO" | site.code == "SCWO") %>% 
-  filter(year == year(Sys.Date())) %>% 
+  #filter(year == year(Sys.Date())) %>% 
   filter(crowberry.present == "yes")
 
 
@@ -161,14 +183,14 @@ cbn <- cleandat %>%
 cnr <- cleandat %>% 
   filter(site.code == "BMIS" | site.code == "CAMO" | site.code == "SCHE" |
          site.code == "SHHA" | site.code == "BLHI") %>% 
-  filter(year == year(Sys.Date())) %>% 
+  #filter(year == year(Sys.Date())) %>% 
   filter(cinquefoil.present == "yes")
 
 ## in non-refugia site
 cnn <- cleandat %>% 
   filter(site.code == "ACMO" | site.code == "BEMO" | site.code == "CABA" | 
          site.code == "PEMO" | site.code == "SCMO" | site.code == "SCWO") %>% 
-  filter(year == year(Sys.Date())) %>% 
+  #filter(year == year(Sys.Date())) %>% 
   filter(cinquefoil.present == "yes")
 
 
@@ -264,14 +286,15 @@ cnn <- cleandat %>%
   </div>
   
   <div class = "sitemap">
-  <img src="index/www/img/sitemap.png" alt="a map showing the sites surveyed so far this year">
+  `r species_leaflet(mapdat)`
+  <!-- <img src="index/www/img/sitemap.png" alt="a map showing the sites surveyed so far this year"> -->
   </div>
         
   <div class = "intro-textbox">
   <div class = "num-sites"> 
   <svg xmlns="http://www.w3.org/2000/svg" height="1.5em" viewBox="0 0 576 512"><!--! Font Awesome Free 6.4.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license (Commercial License) Copyright 2023 Fonticons, Inc. --><path d="M408 120c0 54.6-73.1 151.9-105.2 192c-7.7 9.6-22 9.6-29.6 0C241.1 271.9 168 174.6 168 120C168 53.7 221.7 0 288 0s120 53.7 120 120zm8 80.4c3.5-6.9 6.7-13.8 9.6-20.6c.5-1.2 1-2.5 1.5-3.7l116-46.4C558.9 123.4 576 135 576 152V422.8c0 9.8-6 18.6-15.1 22.3L416 503V200.4zM137.6 138.3c2.4 14.1 7.2 28.3 12.8 41.5c2.9 6.8 6.1 13.7 9.6 20.6V451.8L32.9 502.7C17.1 509 0 497.4 0 480.4V209.6c0-9.8 6-18.6 15.1-22.3l122.6-49zM327.8 332c13.9-17.4 35.7-45.7 56.2-77V504.3L192 449.4V255c20.5 31.3 42.3 59.6 56.2 77c20.5 25.6 59.1 25.6 79.6 0zM288 152a40 40 0 1 0 0-80 40 40 0 1 0 0 80z"/></svg>
   <div class = "highlight-text"> `r round((length(sampsites$site.code)/11)*100, digits = 0)`% </div>
-  of sites sampled
+  of sites sampled this year
   </div>
   <div class = "study-year"> 
   <svg xmlns="http://www.w3.org/2000/svg" height="1.5em" viewBox="0 0 448 512"><!--! Font Awesome Free 6.4.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license (Commercial License) Copyright 2023 Fonticons, Inc. --><path d="M152 24c0-13.3-10.7-24-24-24s-24 10.7-24 24V64H64C28.7 64 0 92.7 0 128v16 48V448c0 35.3 28.7 64 64 64H384c35.3 0 64-28.7 64-64V192 144 128c0-35.3-28.7-64-64-64H344V24c0-13.3-10.7-24-24-24s-24 10.7-24 24V64H152V24zM48 192h80v56H48V192zm0 104h80v64H48V296zm128 0h96v64H176V296zm144 0h80v64H320V296zm80-48H320V192h80v56zm0 160v40c0 8.8-7.2 16-16 16H320V408h80zm-128 0v56H176V408h96zm-144 0v56H64c-8.8 0-16-7.2-16-16V408h80zM272 248H176V192h96v56z"/></svg>
