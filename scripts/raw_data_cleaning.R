@@ -15,7 +15,7 @@ library(ggmap)
 ####             Read and clean               ####
 #------------------------------------------------#
 
-rdata <- tibble(read.csv("data/refugia_export_20240812.csv"))
+rdata <- tibble(read.csv("data/refugia_export_20240829.csv"))
 
 rdata %>% 
   distinct(Site.code)
@@ -57,6 +57,8 @@ cleandata <- rdata %>%
                             "BLHI", site.code),
          site.code = ifelse(site.code == "Choice 1" & survey.date == "2024-08-09",
                             "SCWO", site.code),
+         site.code = ifelse(survey.date == "2024-08-27", "CAMO", site.code),
+         site.code = ifelse(survey.date == "2024-08-28", "CABA", site.code),
          site.code = str_replace(site.code, "BMSI", "BMIS"),
          site.code = str_replace(site.code, "MDIS", "BMIS"),
          site.code = str_replace(site.code, "CABZ", "CABA"),
@@ -104,6 +106,13 @@ t <- cleandata %>%
 cleandata %>% 
   distinct(site.code)
 
+cleandata %>% 
+  select(survey.date, site.code) %>% 
+  group_by(survey.date) %>%
+  distinct() %>% 
+  arrange(survey.date) %>% 
+  print(n=nrow(.))
+    
 
 
 
