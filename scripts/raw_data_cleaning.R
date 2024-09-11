@@ -15,7 +15,7 @@ library(ggmap)
 ####             Read and clean               ####
 #------------------------------------------------#
 
-rdata <- tibble(read.csv("data/refugia_export_20240829.csv"))
+rdata <- tibble(read.csv("data/refugia_export_20240911.csv"))
 
 rdata %>% 
   distinct(Site.code)
