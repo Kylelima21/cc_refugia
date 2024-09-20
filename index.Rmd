@@ -158,7 +158,7 @@ refcells <- cleandat %>%
 
 nonrefcells <- cleandat %>% 
   filter(site.code == "ACMO" | site.code == "BEMO" | site.code == "CABA" | 
-         site.code == "PEMO" | site.code == "SCMO" | site.code == "SCWO") #%>% 
+         site.code == "PEMO" | site.code == "SCWO") #%>% 
   #filter(year == year(Sys.Date()))
   
   
@@ -173,7 +173,7 @@ cbr <- cleandat %>%
 ## in non-refugia site
 cbn <- cleandat %>% 
   filter(site.code == "ACMO" | site.code == "BEMO" | site.code == "CABA" | 
-         site.code == "PEMO" | site.code == "SCMO" | site.code == "SCWO") %>% 
+         site.code == "PEMO" | site.code == "SCWO") %>% 
   #filter(year == year(Sys.Date())) %>% 
   filter(crowberry.present == "yes")
 
@@ -189,7 +189,7 @@ cnr <- cleandat %>%
 ## in non-refugia site
 cnn <- cleandat %>% 
   filter(site.code == "ACMO" | site.code == "BEMO" | site.code == "CABA" | 
-         site.code == "PEMO" | site.code == "SCMO" | site.code == "SCWO") %>% 
+         site.code == "PEMO" | site.code == "SCWO") %>% 
   #filter(year == year(Sys.Date())) %>% 
   filter(cinquefoil.present == "yes")
 
