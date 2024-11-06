@@ -40,6 +40,7 @@ sloc <- read.csv("data/site_locations.csv") %>%
 ## Combine site data with the cleaned field data
 ## Add some variables for modelling
 refdat <- as_tibble(left_join(rd, sloc, by = c("site.code"))) %>% 
+  filter(site != "schoodic_mountain") %>% 
   rename(latitude = latitude.x,
          longitude = longitude.x) %>% 
   select(-c(latitude.y, longitude.y)) %>% 
@@ -53,7 +54,8 @@ refdat <- as_tibble(left_join(rd, sloc, by = c("site.code"))) %>%
          prop.fruit.crow = num.cells.crowberry.fruits/num.cells.crowberry,
          prop.flower.cinq = num.cells.cinquefoil.flowers/num.cells.cinquefoil)
 
-
+refdat2 <- as_tibble(left_join(rd, sloc, by = c("site.code"))) %>% 
+  filter(year == 2024)
 
 
 #------------------------------------------------#
@@ -231,10 +233,39 @@ ggsave("outputs/proportion_refugia_figure.png", height = 5, width = 7, dpi = 700
 
 
 
+#------------------------------------------------#
+####      Quick analysis for EW report        ####
+#------------------------------------------------#
+
+prelim <- plotdat %>% 
+  filter(metric == "cinquefoil\nbrowning" | metric == "crowberry\nbrowning") %>% 
+  mutate(metric = ifelse(metric == "cinquefoil\nbrowning", "cinquefoil", metric)) %>% 
+  mutate(metric = ifelse(metric == "crowberry\nbrowning", "crowberry", metric))
+
+ggplot(prelim, aes(metric, predicted, shape = x)) +
+  geom_errorbar(aes(ymin = conf.low, ymax = conf.high), linewidth = 0.5,
+                position = position_dodge(0.3), color = "gray30", width = 0.1) +
+  geom_point(position = position_dodge(0.3), color = "black", size = 1.5) +
+  scale_y_continuous(limits = c(0, 1)) +
+  labs(x = "", y = "Proportion with browning") +
+  scale_shape_manual(values = c(16, 15)) +
+  theme_bw() +
+  theme(legend.title = element_blank(),
+        legend.position = c(0.16, 0.89),
+        axis.text = element_text(color = "black", size = "12"),
+        axis.text.x = element_text(angle = 0, hjust = 0.5),
+        axis.title = element_text(color = "black", size = "12"),
+        axis.title.y = element_text(margin = margin(0, 0.5, 0, 0, "cm")),
+        strip.text.x = element_text(margin = margin(.2, 0, .2, 0, "cm"), 
+                                    color = "black", size = "12"), 
+        strip.background = element_rect(color = "black", fill = "gray"),
+        panel.background = element_blank(), 
+        panel.grid.minor = element_blank(), 
+        panel.grid.major = element_blank(), 
+        panel.border = element_rect(color = 'black', linewidth = 0.8, fill = NA)) 
 
 
-
-
+ggsave("outputs/EW_report_figure.png", height = 4, width = 4.5, dpi = 700)
 
 
 
