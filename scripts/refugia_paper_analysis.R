@@ -9,6 +9,7 @@ library(lubridate)
 library(lme4)
 library(ggeffects)
 library(glmmTMB)
+library(DHARMa)
 
 
 overdisp_fun <- function(model) {
@@ -58,6 +59,8 @@ refdat2 <- as_tibble(left_join(rd, sloc, by = c("site.code"))) %>%
   filter(year == 2024)
 
 
+
+
 #------------------------------------------------#
 ####             Create models                ####
 #------------------------------------------------#
@@ -65,31 +68,33 @@ refdat2 <- as_tibble(left_join(rd, sloc, by = c("site.code"))) %>%
 ### ├ Crowberry Browning Model  ------------------
 ## Create dataset
 crbrown <- refdat %>% 
-  select(site.code, refugia, survey.date, year, num.cells.crowberry, 
+  select(site.code, refugia, survey.date, year, doy, num.cells.crowberry, 
          num.cells.crowberry.brleaves, prop.brown.crow) %>% 
   filter(prop.brown.crow <= 1) %>%
   mutate(neg.brown.crow = num.cells.crowberry - num.cells.crowberry.brleaves)
 
 
 ## Make glmer model with random effect of site 
-crow.brown <- glmer(cbind(num.cells.crowberry.brleaves, neg.brown.crow) ~ refugia + (1 | site.code), 
+crow.brown <- glmer(cbind(num.cells.crowberry.brleaves, neg.brown.crow) ~ 
+                      refugia + factor(year) + (1 | site.code), 
                     family = binomial, data = crbrown)
-summary(crow.brown)
-overdisp_fun(crow.brown) # highly overdispersed
+
+sim.brown.1 = simulateResiduals(crow.brown, re.form = NULL)
+testDispersion(sim.brown.1) # overdispersed
 
 
-## To attempt to fix overdispersion, try beta-binomial model
-crow.brown.bb <- glmmTMB(cbind(num.cells.crowberry.brleaves, neg.brown.crow) ~ refugia + (1 | site.code),
+## To handle overdispersion, use beta-binomial model instead
+crow.brown.bb <- glmmTMB(cbind(num.cells.crowberry.brleaves, neg.brown.crow) ~ 
+                           refugia + factor(year) + doy + (1 | site.code),
                          family = betabinomial(link = "logit"), data = crbrown)
 summary(crow.brown.bb)
-overdisp_fun(crow.brown.bb) # still overdispersed
 
 
-## Run simplified quasi-binomial model instead because the
-## beta-binomial model did not fix overdispersion
-crow.brown.qb <- glm(cbind(num.cells.crowberry.brleaves, neg.brown.crow) ~ refugia, 
-                     family = quasibinomial, data = crbrown)
-summary(crow.brown.qb)
+## Checking model fit
+sim.brown.crow = simulateResiduals(crow.brown.bb, re.form = NULL)
+plot(sim.brown.crow)
+testDispersion(sim.brown.crow)
+testZeroInflation(sim.brown.crow)
 
 
 
@@ -99,25 +104,32 @@ summary(crow.brown.qb)
 ### ├ Cinquefoil Browning Model  -----------------
 ## Create dataset
 cibrown <- refdat %>% 
-  select(site.code, refugia, survey.date, year, num.cells.cinquefoil, 
+  select(site.code, refugia, survey.date, year, doy, num.cells.cinquefoil, 
          num.cells.cinquefoil.brleaves, prop.brown.cinq) %>% 
   filter(prop.brown.cinq <= 1) %>%
   mutate(neg.brown.cinq = num.cells.cinquefoil - num.cells.cinquefoil.brleaves)
 
 
 ## Make glmer model with random effect of site 
-cinq.brown <- glmer(cbind(num.cells.cinquefoil.brleaves, neg.brown.cinq) ~ refugia + (1 | site.code), 
+cinq.brown <- glmer(cbind(num.cells.cinquefoil.brleaves, neg.brown.cinq) ~ refugia + factor(year) +  (1 | site.code), 
                     family = binomial, data = cibrown)
-summary(cinq.brown)
-overdisp_fun(cinq.brown) # highly overdispersed
+
+sim.brown.1 = simulateResiduals(cinq.brown, re.form = NULL)
+testDispersion(sim.brown.1) # overdispersed
 
 
-## Run simplified quasi-binomial model instead because the
-## beta-binomial model did not fix overdispersion
-cinq.brown.qb <- glm(cbind(num.cells.cinquefoil.brleaves, neg.brown.cinq) ~ refugia, 
-                     family = quasibinomial, data = cibrown)
-summary(cinq.brown.qb)
+## To handle overdispersion, use beta-binomial model instead
+cinq.brown.bb <- glmmTMB(cbind(num.cells.cinquefoil.brleaves, neg.brown.cinq) ~ 
+                           refugia + factor(year) + doy + (1 | site.code),
+                         family = betabinomial(link = "logit"), data = cibrown)
+summary(cinq.brown.bb)
 
+
+## Checking model fit
+sim.brown.cinq = simulateResiduals(cinq.brown.bb, re.form = NULL)
+plot(sim.brown.cinq)
+testDispersion(sim.brown.cinq)
+testZeroInflation(sim.brown.cinq)
 
 
 
@@ -126,26 +138,34 @@ summary(cinq.brown.qb)
 
 ### ├ Crowberry Reproduction Model  --------------
 ## Create dataset
-crfruit <- refdat %>% 
-  select(site.code, refugia, survey.date, year, num.cells.crowberry, 
-         num.cells.crowberry.fruits, prop.fruit.crow) %>% 
-  filter(prop.fruit.crow <= 1) %>%
-  mutate(neg.fruit.crow = num.cells.crowberry - num.cells.crowberry.fruits)
+crreprod <- refdat %>% 
+  filter(year == 2024) %>% 
+  select(site.code, refugia, survey.date, year, doy, num.cells.crowberry, 
+         num.cells.crowberry.reprod, prop.reprod.crow) %>% 
+  filter(prop.reprod.crow <= 1) %>%
+  mutate(neg.reprod.crow = num.cells.crowberry - num.cells.crowberry.reprod)
 
 
 ## Make glmer model with random effect of site 
-crow.fruits <- glmer(cbind(num.cells.crowberry.fruits, neg.fruit.crow) ~ refugia + (1 | site.code), 
-                    family = binomial, data = crfruit)
-summary(crow.fruits)
-overdisp_fun(crow.fruits) # highly overdispersed
+crow.reprod <- glmer(cbind(num.cells.crowberry.reprod, neg.reprod.crow) ~ refugia + (1 | site.code), 
+                    family = binomial, data = crreprod)
+
+sim.brown.1 = simulateResiduals(crow.reprod, re.form = NULL)
+testDispersion(sim.brown.1) # overdispersed
 
 
-## Run simplified quasi-binomial model instead because the
-## beta-binomial model did not fix overdispersion
-crow.fruits.qb <- glm(cbind(num.cells.crowberry.fruits, neg.fruit.crow) ~ refugia, 
-                     family = quasibinomial, data = crfruit)
-summary(crow.fruits.qb)
+## To handle overdispersion, use beta-binomial model instead
+crow.reprod.bb <- glmmTMB(cbind(num.cells.crowberry.reprod, neg.reprod.crow) ~ 
+                            refugia + doy + (1 | site.code),
+                         family = betabinomial(link = "logit"), data = crreprod)
+summary(crow.reprod.bb)
 
+
+## Checking model fit
+sim.reprod.crow = simulateResiduals(crow.reprod.bb, re.form = NULL)
+plot(sim.reprod.crow)
+testDispersion(sim.reprod.crow)
+testZeroInflation(sim.reprod.crow)
 
 
 
@@ -154,25 +174,106 @@ summary(crow.fruits.qb)
 
 ### ├ Cinquefoil Reproduction Model  -------------
 ## Create dataset
-ciflower <- refdat %>% 
-  select(site.code, refugia, survey.date, year, num.cells.cinquefoil, 
+cireprod <- refdat %>%
+  filter(year == 2024) %>% 
+  select(site.code, refugia, survey.date, year, doy, num.cells.cinquefoil, 
+         num.cells.cinquefoil.reprod, prop.reprod.cinq) %>% 
+  filter(prop.reprod.cinq <= 1) %>%
+  mutate(neg.reprod.cinq = num.cells.cinquefoil - num.cells.cinquefoil.reprod)
+
+
+## Make glmer model with random effect of site 
+cinq.reprod <- glmer(cbind(num.cells.cinquefoil.reprod, neg.reprod.cinq) ~ refugia + (1 | site.code), 
+                     family = binomial, data = cireprod)
+
+sim.brown.1 = simulateResiduals(cinq.reprod, re.form = NULL)
+testDispersion(sim.brown.1) # overdispersed
+
+
+## To handle overdispersion, use beta-binomial model instead
+cinq.reprod.bb <- glmmTMB(cbind(num.cells.cinquefoil.reprod, neg.reprod.cinq) ~ 
+                            refugia + doy + (1 | site.code),
+                          family = betabinomial(link = "logit"), data = cireprod)
+summary(cinq.reprod.bb)
+
+
+## Checking model fit
+sim.reprod.cinq = simulateResiduals(cinq.reprod.bb, re.form = NULL)
+plot(sim.reprod.cinq)
+testDispersion(sim.reprod.cinq)
+testZeroInflation(sim.reprod.cinq)
+
+
+
+#------------------------------------------------#
+
+
+### ├ Crowberry Fruiting Model  --------------
+## Create dataset
+crfruit <- refdat %>% 
+  select(site.code, refugia, survey.date, year, doy, num.cells.crowberry, 
+         num.cells.crowberry.fruits, prop.fruit.crow) %>% 
+  filter(prop.fruit.crow <= 1) %>%
+  mutate(neg.fruit.crow = num.cells.crowberry - num.cells.crowberry.fruits)
+
+
+## Make glmer model with random effect of site 
+crow.fruits <- glmer(cbind(num.cells.crowberry.fruits, neg.fruit.crow) ~ 
+                       refugia + factor(year) + (1 | site.code), 
+                     family = binomial, data = crfruit)
+
+sim.brown.1 = simulateResiduals(crow.fruits, re.form = NULL)
+testDispersion(sim.brown.1) # overdispersed
+
+
+## To handle overdispersion, use beta-binomial model instead
+crow.fruit.bb <- glmmTMB(cbind(num.cells.crowberry.fruits, neg.fruit.crow) ~ 
+                            refugia + factor(year) + doy + (1 | site.code),
+                          family = betabinomial(link = "logit"), data = crfruit)
+summary(crow.fruit.bb)
+
+
+## Checking model fit
+sim.fruits = simulateResiduals(crow.fruit.bb, re.form = NULL)
+plot(sim.fruits)
+testDispersion(sim.fruits)
+testZeroInflation(sim.fruits)
+
+
+
+#------------------------------------------------#
+
+
+### ├ Cinquefoil Flowering Model  -------------
+## Create dataset
+ciflower <- refdat %>%
+  select(site.code, refugia, survey.date, year, doy, num.cells.cinquefoil, 
          num.cells.cinquefoil.flowers, prop.flower.cinq) %>% 
   filter(prop.flower.cinq <= 1) %>%
   mutate(neg.flower.cinq = num.cells.cinquefoil - num.cells.cinquefoil.flowers)
 
 
 ## Make glmer model with random effect of site 
-cinq.flowers <- glmer(cbind(num.cells.cinquefoil.flowers, neg.flower.cinq) ~ refugia + (1 | site.code), 
-                    family = binomial, data = ciflower)
-summary(cinq.flowers)
-overdisp_fun(cinq.flowers) # highly overdispersed
+cinq.flow <- glmer(cbind(num.cells.cinquefoil.flowers, neg.flower.cinq) ~ 
+                     refugia + factor(year) + (1 | site.code), 
+                     family = binomial, data = ciflower)
+
+sim.brown.1 = simulateResiduals(cinq.flow, re.form = NULL)
+testDispersion(sim.brown.1) # overdispersed
 
 
-## Run simplified quasi-binomial model instead because the
-## beta-binomial model did not fix overdispersion
-cinq.flowers.qb <- glm(cbind(num.cells.cinquefoil.flowers, neg.flower.cinq) ~ refugia, 
-                     family = quasibinomial, data = ciflower)
-summary(cinq.flowers.qb)
+## To handle overdispersion, use beta-binomial model instead
+cinq.flower.bb <- glmmTMB(cbind(num.cells.cinquefoil.flowers, neg.flower.cinq) ~ 
+                            refugia + factor(year) + doy + (1 | site.code),
+                          family = betabinomial(link = "logit"), data = ciflower)
+summary(cinq.flower.bb)
+
+
+## Checking model fit
+sim.flow = simulateResiduals(cinq.flower.bb, re.form = NULL)
+plot(sim.flow)
+testDispersion(sim.flow)
+testZeroInflation(sim.flow)
 
 
 
@@ -182,21 +283,23 @@ summary(cinq.flowers.qb)
 #------------------------------------------------#
 
 
-predcinq.rp <- ggpredict(cinq.flowers.qb, terms = "refugia") %>% 
-  as_tibble() %>% 
-  mutate(metric = "cinquefoil\nflowering")
-
-predcrow.rp <- ggpredict(crow.fruits.qb, terms = "refugia") %>% 
-  as_tibble() %>% 
-  mutate(metric = "crowberry\nfruiting")
-
-predcinq.br <- ggpredict(cinq.brown.qb, terms = "refugia") %>% 
+predcinq.br <- ggpredict(cinq.brown.bb, terms = "refugia") %>% 
   as_tibble() %>% 
   mutate(metric = "cinquefoil\nbrowning")
 
-predcrow.br <- ggpredict(crow.brown.qb, terms = "refugia") %>% 
+predcinq.rp <- ggpredict(cinq.flower.bb, terms = "refugia") %>% 
+  as_tibble() %>% 
+  mutate(metric = "cinquefoil\nflowers")
+
+predcrow.br <- ggpredict(crow.brown.bb, terms = "refugia") %>% 
   as_tibble() %>% 
   mutate(metric = "crowberry\nbrowning")
+
+predcrow.rp <- ggpredict(crow.fruit.bb, terms = "refugia") %>% 
+  as_tibble() %>% 
+  mutate(metric = "crowberry\nfruits")
+
+
 
 plotdat <- bind_rows(predcinq.rp, predcrow.rp, predcinq.br, predcrow.br) %>% 
   mutate(x = factor(ifelse(x == 1, "Refugia", "Non-refugia"), 
@@ -276,6 +379,27 @@ ggsave("outputs/EW_report_figure.png", height = 4, width = 4.5, dpi = 700)
 #------------------------------------------------#
 ####                 EXTRA                    ####
 #------------------------------------------------#
+
+
+# refdat %>% 
+#   ggplot(aes(x = doy, y = prop.reprod.cinq)) + 
+#   geom_point()
+# 
+# 
+# refdat %>% 
+#   ggplot(aes(x = doy, y = prop.reprod.crow)) + 
+#   geom_point()
+
+
+
+# ## Run simplified quasi-binomial model instead because the
+# ## beta-binomial model did not fix overdispersion
+# crow.brown.qb <- glm(cbind(num.cells.crowberry.brleaves, neg.brown.crow) ~ refugia + site.code,
+#                      family = quasibinomial, data = crbrown)
+# summary(crow.brown.qb)
+
+
+
 
 # library(AED)
 # Tbdeer <- read_delim("data/Tbdeer.txt")
